@@ -88,26 +88,32 @@ export default function Auth() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
-      <div className="w-full max-w-sm animate-fade-in">
+      {/* Decorative background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2" />
+      </div>
+
+      <div className="w-full max-w-sm relative z-10 animate-fade-in">
         {/* Logo/Brand */}
-        <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-gold shadow-gold mb-4">
-            <Sparkles className="w-8 h-8 text-primary-foreground" />
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-gold shadow-gold mb-5">
+            <Sparkles className="w-10 h-10 text-primary-foreground" />
           </div>
-          <h1 className="text-3xl font-display font-bold text-foreground">
+          <h1 className="text-4xl font-display font-bold text-foreground tracking-tight">
             Clube do Brilho
           </h1>
-          <p className="text-muted-foreground mt-2 text-sm">
+          <p className="text-muted-foreground mt-2">
             Gerencie suas semijoias com elegância
           </p>
         </div>
 
-        <Card className="border-0 shadow-soft">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl font-display text-center">
+        <Card className="border-0 shadow-soft bg-card/80 backdrop-blur">
+          <CardHeader className="space-y-1 pb-6 text-center">
+            <CardTitle className="text-2xl font-display">
               {isLogin ? 'Entrar' : 'Criar conta'}
             </CardTitle>
-            <CardDescription className="text-center">
+            <CardDescription>
               {isLogin 
                 ? 'Acesse sua conta para continuar' 
                 : 'Preencha os dados para começar'
@@ -115,9 +121,9 @@ export default function Auth() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -125,25 +131,25 @@ export default function Auth() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-12"
+                  className="h-12 text-base"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password" className="text-sm font-medium">Senha</Label>
                 <div className="relative">
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="••••••"
+                    placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 pr-12"
+                    className="h-12 text-base pr-12"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -151,23 +157,23 @@ export default function Auth() {
               </div>
               <Button 
                 type="submit" 
-                className="w-full h-12 bg-gradient-gold hover:opacity-90 text-primary-foreground font-semibold shadow-gold"
+                className="w-full h-12 text-base bg-gradient-gold hover:opacity-90 text-primary-foreground font-semibold shadow-gold transition-all"
                 disabled={loading}
               >
                 {loading ? 'Carregando...' : isLogin ? 'Entrar' : 'Criar conta'}
               </Button>
             </form>
 
-            <div className="mt-6 text-center">
+            <div className="mt-8 text-center">
               <button
                 type="button"
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
                 {isLogin ? (
-                  <>Não tem conta? <span className="text-primary font-medium">Criar agora</span></>
+                  <>Não tem conta? <span className="text-primary font-semibold">Criar agora</span></>
                 ) : (
-                  <>Já tem conta? <span className="text-primary font-medium">Fazer login</span></>
+                  <>Já tem conta? <span className="text-primary font-semibold">Fazer login</span></>
                 )}
               </button>
             </div>

@@ -5,8 +5,8 @@ import { AppLayout } from '@/components/AppLayout';
 import { PageHeader } from '@/components/PageHeader';
 import { MetricCard } from '@/components/MetricCard';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { DollarSign, TrendingUp, Users, Package, AlertTriangle, Star } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip } from 'recharts';
+import { DollarSign, TrendingUp, Users, Package, AlertTriangle, Star, Sparkles } from 'lucide-react';
+import { BarChart, Bar, XAxis, YAxis, ResponsiveContainer, Tooltip, Cell } from 'recharts';
 
 interface DashboardData {
   totalInventoryValue: number;
@@ -41,17 +41,9 @@ export default function Dashboard() {
 
   const fetchDashboardData = async () => {
     try {
-      // Fetch products for inventory value
-      const { data: products } = await supabase
-        .from('products')
-        .select('*');
+      const { data: products } = await supabase.from('products').select('*');
+      const { count: customersCount } = await supabase.from('customers').select('*', { count: 'exact', head: true });
 
-      // Fetch customers count
-      const { count: customersCount } = await supabase
-        .from('customers')
-        .select('*', { count: 'exact', head: true });
-
-      // Fetch sales for this month
       const startOfMonth = new Date();
       startOfMonth.setDate(1);
       startOfMonth.setHours(0, 0, 0, 0);
@@ -61,25 +53,21 @@ export default function Dashboard() {
         .select('total_amount, created_at')
         .gte('created_at', startOfMonth.toISOString());
 
-      // Fetch stock entries for this month (expenses)
       const { data: monthlyEntries } = await supabase
         .from('stock_movements')
         .select('quantity, product_id, products(buy_price)')
         .eq('type', 'entry')
         .gte('created_at', startOfMonth.toISOString());
 
-      // Fetch top customers
       const { data: salesWithCustomers } = await supabase
         .from('sales')
         .select('total_amount, customer_id, customers(name)');
 
-      // Fetch best sellers this month
       const { data: saleItems } = await supabase
         .from('sale_items')
         .select('quantity, product_id, products(name), sale_id, sales(created_at)')
         .gte('sales.created_at', startOfMonth.toISOString());
 
-      // Calculate metrics
       const totalInventoryValue = products?.reduce((sum, p) => sum + (p.buy_price * p.stock_quantity), 0) || 0;
       const potentialRevenue = products?.reduce((sum, p) => sum + (p.sell_price * p.stock_quantity), 0) || 0;
       const monthlyRevenue = monthlySales?.reduce((sum, s) => sum + Number(s.total_amount), 0) || 0;
@@ -91,7 +79,6 @@ export default function Dashboard() {
 
       const lowStockProducts = products?.filter(p => p.stock_quantity < 3) || [];
 
-      // Group sales by customer
       const customerTotals: { [key: string]: { name: string; total: number } } = {};
       salesWithCustomers?.forEach(sale => {
         const customerId = sale.customer_id;
@@ -105,7 +92,6 @@ export default function Dashboard() {
         .sort((a, b) => b.total - a.total)
         .slice(0, 5);
 
-      // Group sales by product
       const productSales: { [key: string]: { name: string; quantity: number } } = {};
       saleItems?.forEach(item => {
         const productId = item.product_id;
@@ -163,7 +149,7 @@ export default function Dashboard() {
       />
 
       {/* Metric Cards */}
-      <div className="grid grid-cols-2 gap-3 mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
         <MetricCard
           title="Valor em Estoque"
           value={formatCurrency(data.totalInventoryValue)}
@@ -193,96 +179,100 @@ export default function Dashboard() {
         />
       </div>
 
-      {/* Top Customers Chart */}
-      {data.topCustomers.length > 0 && (
-        <Card className="mb-6 border-0 shadow-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base font-display flex items-center gap-2">
-              <Star className="w-4 h-4 text-primary" />
-              Melhores Clientes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <ResponsiveContainer width="100%" height={160}>
-              <BarChart data={data.topCustomers} layout="vertical">
-                <XAxis type="number" hide />
-                <YAxis 
-                  type="category" 
-                  dataKey="name" 
-                  width={80}
-                  tick={{ fontSize: 12 }}
-                />
-                <Tooltip 
-                  formatter={(value) => formatCurrency(Number(value))}
-                  labelStyle={{ color: 'hsl(var(--foreground))' }}
-                  contentStyle={{ 
-                    backgroundColor: 'hsl(var(--card))',
-                    border: '1px solid hsl(var(--border))',
-                    borderRadius: '8px'
-                  }}
-                />
-                <Bar 
-                  dataKey="total" 
-                  fill="hsl(43 74% 49%)"
-                  radius={[0, 4, 4, 0]}
-                />
-              </BarChart>
-            </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      )}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {/* Top Customers Chart */}
+        {data.topCustomers.length > 0 && (
+          <Card className="border shadow-card">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg font-display flex items-center gap-2">
+                <Star className="w-5 h-5 text-primary" />
+                Melhores Clientes
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <ResponsiveContainer width="100%" height={200}>
+                <BarChart data={data.topCustomers} layout="vertical" margin={{ left: 0, right: 20 }}>
+                  <XAxis type="number" hide />
+                  <YAxis 
+                    type="category" 
+                    dataKey="name" 
+                    width={100}
+                    tick={{ fontSize: 13, fill: 'hsl(30 15% 18%)' }}
+                  />
+                  <Tooltip 
+                    formatter={(value) => formatCurrency(Number(value))}
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(45 40% 99%)',
+                      border: '1px solid hsl(45 25% 88%)',
+                      borderRadius: '8px',
+                      fontSize: '13px'
+                    }}
+                  />
+                  <Bar dataKey="total" radius={[0, 6, 6, 0]}>
+                    {data.topCustomers.map((_, index) => (
+                      <Cell key={`cell-${index}`} fill={index === 0 ? 'hsl(45 70% 42%)' : 'hsl(45 70% 70%)'} />
+                    ))}
+                  </Bar>
+                </BarChart>
+              </ResponsiveContainer>
+            </CardContent>
+          </Card>
+        )}
+
+        {/* Best Sellers */}
+        {data.bestSellers.length > 0 && (
+          <Card className="border shadow-card">
+            <CardHeader className="pb-4">
+              <CardTitle className="text-lg font-display flex items-center gap-2">
+                <TrendingUp className="w-5 h-5 text-primary" />
+                Mais Vendidos do Mês
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {data.bestSellers.map((product, index) => (
+                  <div 
+                    key={product.name}
+                    className="flex items-center justify-between p-3 bg-muted/50 rounded-lg transition-colors hover:bg-muted"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className={`text-sm font-bold w-7 h-7 flex items-center justify-center rounded-full ${
+                        index === 0 ? 'bg-primary text-primary-foreground' : 'bg-secondary text-secondary-foreground'
+                      }`}>
+                        {index + 1}
+                      </span>
+                      <span className="text-sm font-medium">{product.name}</span>
+                    </div>
+                    <span className="text-sm text-muted-foreground font-medium">
+                      {product.quantity} vendidos
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        )}
+      </div>
 
       {/* Low Stock Alerts */}
       {data.lowStockProducts.length > 0 && (
-        <Card className="mb-6 border-0 shadow-card bg-secondary">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base font-display flex items-center gap-2 text-secondary-foreground">
-              <AlertTriangle className="w-4 h-4" />
+        <Card className="mt-6 border-destructive/20 bg-destructive/5 shadow-card">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg font-display flex items-center gap-2 text-destructive">
+              <AlertTriangle className="w-5 h-5" />
               Estoque Baixo
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-2">
-              {data.lowStockProducts.slice(0, 5).map((product) => (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+              {data.lowStockProducts.slice(0, 6).map((product) => (
                 <div 
                   key={product.id}
-                  className="flex items-center justify-between p-2 bg-card rounded-lg"
+                  className="flex items-center justify-between p-3 bg-card rounded-lg border"
                 >
-                  <span className="text-sm font-medium">{product.name}</span>
-                  <span className="text-xs font-semibold px-2 py-1 bg-destructive/10 text-destructive rounded-full">
+                  <span className="text-sm font-medium truncate mr-2">{product.name}</span>
+                  <span className="text-xs font-semibold px-2 py-1 bg-destructive/10 text-destructive rounded-full whitespace-nowrap">
                     {product.stock_quantity} un.
-                  </span>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Best Sellers */}
-      {data.bestSellers.length > 0 && (
-        <Card className="border-0 shadow-card">
-          <CardHeader className="pb-2">
-            <CardTitle className="text-base font-display flex items-center gap-2">
-              <TrendingUp className="w-4 h-4 text-primary" />
-              Mais Vendidos do Mês
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              {data.bestSellers.map((product, index) => (
-                <div 
-                  key={product.name}
-                  className="flex items-center justify-between p-2 bg-muted rounded-lg"
-                >
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-primary w-5 h-5 flex items-center justify-center bg-primary/10 rounded-full">
-                      {index + 1}
-                    </span>
-                    <span className="text-sm font-medium">{product.name}</span>
-                  </div>
-                  <span className="text-xs text-muted-foreground">
-                    {product.quantity} vendidos
                   </span>
                 </div>
               ))}
@@ -293,13 +283,13 @@ export default function Dashboard() {
 
       {/* Empty State */}
       {data.totalCustomers === 0 && data.lowStockProducts.length === 0 && (
-        <Card className="border-0 shadow-card text-center p-8">
-          <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-secondary mb-4">
-            <Package className="w-6 h-6 text-muted-foreground" />
+        <Card className="border shadow-card text-center p-12">
+          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-gold shadow-gold mb-6">
+            <Sparkles className="w-8 h-8 text-primary-foreground" />
           </div>
-          <h3 className="font-display font-semibold mb-2">Comece agora!</h3>
-          <p className="text-sm text-muted-foreground">
-            Adicione seus primeiros produtos e clientes para ver as métricas aqui.
+          <h3 className="font-display text-xl font-semibold mb-2">Bem-vindo ao Clube do Brilho!</h3>
+          <p className="text-muted-foreground max-w-md mx-auto">
+            Comece adicionando seus primeiros produtos e clientes para ver as métricas do seu negócio aqui.
           </p>
         </Card>
       )}

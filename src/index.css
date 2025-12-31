@@ -1,89 +1,78 @@
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
-
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Clube do Brilho Design System
    Elegant gold, soft pink, and white palette for a luxury jewelry store
+   Fonts: Cormorant Garamond (display) + DM Sans (body)
 */
 
 @layer base {
   :root {
     /* Cream/Off-white backgrounds */
-    --background: 40 33% 98%;
-    --foreground: 25 15% 15%;
+    --background: 45 30% 98%;
+    --foreground: 30 15% 18%;
 
     /* Warm white cards */
-    --card: 40 50% 99%;
-    --card-foreground: 25 15% 15%;
+    --card: 45 40% 99%;
+    --card-foreground: 30 15% 18%;
 
-    --popover: 40 50% 99%;
-    --popover-foreground: 25 15% 15%;
+    --popover: 45 40% 99%;
+    --popover-foreground: 30 15% 18%;
 
-    /* Gold primary - elegant jewelry gold */
-    --primary: 43 74% 49%;
-    --primary-foreground: 40 50% 99%;
+    /* Rich gold primary */
+    --primary: 45 70% 42%;
+    --primary-foreground: 45 40% 99%;
 
     /* Soft blush pink secondary */
-    --secondary: 350 60% 95%;
-    --secondary-foreground: 350 40% 30%;
+    --secondary: 355 50% 95%;
+    --secondary-foreground: 355 35% 35%;
 
     /* Muted warm tones */
-    --muted: 40 20% 94%;
-    --muted-foreground: 25 10% 45%;
+    --muted: 45 15% 93%;
+    --muted-foreground: 30 10% 50%;
 
     /* Rose gold accent */
-    --accent: 15 60% 85%;
-    --accent-foreground: 15 50% 25%;
+    --accent: 20 50% 90%;
+    --accent-foreground: 20 45% 30%;
 
     /* Destructive - soft coral */
-    --destructive: 0 65% 55%;
+    --destructive: 0 60% 50%;
     --destructive-foreground: 0 0% 100%;
 
     /* Border and inputs */
-    --border: 40 30% 88%;
-    --input: 40 30% 88%;
-    --ring: 43 74% 49%;
+    --border: 45 25% 88%;
+    --input: 45 25% 88%;
+    --ring: 45 70% 42%;
 
-    --radius: 0.75rem;
+    --radius: 0.625rem;
 
     /* Chart colors */
-    --chart-1: 43 74% 49%;
-    --chart-2: 350 60% 70%;
-    --chart-3: 15 60% 75%;
-    --chart-4: 40 45% 65%;
-    --chart-5: 25 35% 55%;
+    --chart-1: 45 70% 42%;
+    --chart-2: 355 50% 70%;
+    --chart-3: 20 50% 75%;
+    --chart-4: 45 40% 60%;
+    --chart-5: 30 30% 55%;
 
     /* Custom variables */
-    --gold: 43 74% 49%;
-    --gold-light: 45 80% 75%;
-    --gold-dark: 40 70% 35%;
-    --blush: 350 60% 90%;
-    --blush-dark: 350 40% 70%;
-    --rose-gold: 15 60% 72%;
-    --cream: 40 33% 98%;
-    --warm-white: 40 50% 99%;
+    --gold: 45 70% 42%;
+    --gold-light: 47 75% 70%;
+    --gold-dark: 42 65% 32%;
+    --blush: 355 50% 92%;
+    --blush-dark: 355 40% 72%;
+    --rose-gold: 20 50% 70%;
+    --cream: 45 30% 98%;
+    --warm-white: 45 40% 99%;
 
-    /* Gradients */
-    --gradient-gold: linear-gradient(135deg, hsl(45 80% 60%) 0%, hsl(43 74% 49%) 50%, hsl(40 70% 40%) 100%);
-    --gradient-blush: linear-gradient(135deg, hsl(350 60% 95%) 0%, hsl(350 55% 85%) 100%);
-    --gradient-rose: linear-gradient(135deg, hsl(15 60% 85%) 0%, hsl(350 50% 80%) 100%);
-
-    /* Shadows */
-    --shadow-gold: 0 4px 20px -4px hsl(43 74% 49% / 0.25);
-    --shadow-soft: 0 4px 12px -2px hsl(25 15% 15% / 0.08);
-    --shadow-card: 0 2px 8px -2px hsl(25 15% 15% / 0.06);
-
-    /* Sidebar - warm tones */
-    --sidebar-background: 40 33% 97%;
-    --sidebar-foreground: 25 15% 25%;
-    --sidebar-primary: 43 74% 49%;
-    --sidebar-primary-foreground: 40 50% 99%;
-    --sidebar-accent: 350 60% 95%;
-    --sidebar-accent-foreground: 350 40% 25%;
-    --sidebar-border: 40 30% 90%;
-    --sidebar-ring: 43 74% 49%;
+    /* Sidebar */
+    --sidebar-background: 45 25% 97%;
+    --sidebar-foreground: 30 15% 25%;
+    --sidebar-primary: 45 70% 42%;
+    --sidebar-primary-foreground: 45 40% 99%;
+    --sidebar-accent: 355 50% 95%;
+    --sidebar-accent-foreground: 355 35% 30%;
+    --sidebar-border: 45 20% 90%;
+    --sidebar-ring: 45 70% 42%;
   }
 }
 
@@ -93,46 +82,50 @@
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    @apply bg-background text-foreground antialiased;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
   }
 }
 
 @layer utilities {
   .font-display {
-    font-family: 'Playfair Display', Georgia, serif;
+    font-family: 'Cormorant Garamond', Georgia, serif;
   }
 
   .font-sans {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
   }
 
   .bg-gradient-gold {
-    background: var(--gradient-gold);
+    background: linear-gradient(135deg, hsl(47 75% 55%) 0%, hsl(45 70% 42%) 50%, hsl(42 65% 35%) 100%);
   }
 
   .bg-gradient-blush {
-    background: var(--gradient-blush);
+    background: linear-gradient(135deg, hsl(355 50% 95%) 0%, hsl(355 45% 88%) 100%);
   }
 
   .bg-gradient-rose {
-    background: var(--gradient-rose);
+    background: linear-gradient(135deg, hsl(20 50% 90%) 0%, hsl(355 45% 85%) 100%);
   }
 
   .shadow-gold {
-    box-shadow: var(--shadow-gold);
+    box-shadow: 0 4px 20px -4px hsl(45 70% 42% / 0.3);
   }
 
   .shadow-soft {
-    box-shadow: var(--shadow-soft);
+    box-shadow: 0 4px 16px -4px hsl(30 15% 18% / 0.1);
   }
 
   .shadow-card {
-    box-shadow: var(--shadow-card);
+    box-shadow: 0 2px 12px -4px hsl(30 15% 18% / 0.08);
   }
 
   .text-gold {
@@ -163,21 +156,32 @@
     border-color: hsl(var(--gold));
   }
 
-  /* Safe area for mobile bottom nav */
-  .pb-safe {
-    padding-bottom: calc(5rem + env(safe-area-inset-bottom));
-  }
-
   /* Glass morphism effect */
   .glass {
-    background: hsl(var(--warm-white) / 0.8);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: hsl(var(--warm-white) / 0.85);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
   }
 
   /* Touch-friendly tap targets */
   .touch-target {
     min-height: 44px;
     min-width: 44px;
+  }
+
+  /* Smooth page transitions */
+  .page-enter {
+    animation: page-enter 0.3s ease-out;
+  }
+
+  @keyframes page-enter {
+    from {
+      opacity: 0;
+      transform: translateY(8px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
   }
 }

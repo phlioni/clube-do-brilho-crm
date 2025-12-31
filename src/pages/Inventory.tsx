@@ -55,11 +55,7 @@ export default function Inventory() {
   }, [user]);
 
   const fetchProducts = async () => {
-    const { data, error } = await supabase
-      .from('products')
-      .select('*')
-      .order('name');
-    
+    const { data, error } = await supabase.from('products').select('*').order('name');
     if (error) {
       toast({ title: 'Erro', description: 'Não foi possível carregar os produtos', variant: 'destructive' });
     } else {
@@ -86,11 +82,7 @@ export default function Inventory() {
     };
 
     if (editingProduct) {
-      const { error } = await supabase
-        .from('products')
-        .update(productData)
-        .eq('id', editingProduct.id);
-
+      const { error } = await supabase.from('products').update(productData).eq('id', editingProduct.id);
       if (error) {
         toast({ title: 'Erro', description: 'Não foi possível atualizar o produto', variant: 'destructive' });
       } else {
@@ -99,10 +91,7 @@ export default function Inventory() {
         resetForm();
       }
     } else {
-      const { error } = await supabase
-        .from('products')
-        .insert([productData]);
-
+      const { error } = await supabase.from('products').insert([productData]);
       if (error) {
         toast({ title: 'Erro', description: 'Não foi possível criar o produto', variant: 'destructive' });
       } else {
@@ -115,7 +104,6 @@ export default function Inventory() {
 
   const handleDeleteProduct = async (id: string) => {
     const { error } = await supabase.from('products').delete().eq('id', id);
-    
     if (error) {
       toast({ title: 'Erro', description: 'Não foi possível excluir o produto', variant: 'destructive' });
     } else {
@@ -136,27 +124,20 @@ export default function Inventory() {
       return;
     }
 
-    // Create stock movement record
-    const { error: movementError } = await supabase
-      .from('stock_movements')
-      .insert([{
-        product_id: selectedProduct.id,
-        type: stockType,
-        quantity: stockQuantity,
-        notes: stockNotes || null,
-        user_id: user?.id,
-      }]);
+    const { error: movementError } = await supabase.from('stock_movements').insert([{
+      product_id: selectedProduct.id,
+      type: stockType,
+      quantity: stockQuantity,
+      notes: stockNotes || null,
+      user_id: user?.id,
+    }]);
 
     if (movementError) {
       toast({ title: 'Erro', description: 'Não foi possível registrar o movimento', variant: 'destructive' });
       return;
     }
 
-    // Update product stock
-    const { error: updateError } = await supabase
-      .from('products')
-      .update({ stock_quantity: newQuantity })
-      .eq('id', selectedProduct.id);
+    const { error: updateError } = await supabase.from('products').update({ stock_quantity: newQuantity }).eq('id', selectedProduct.id);
 
     if (updateError) {
       toast({ title: 'Erro', description: 'Não foi possível atualizar o estoque', variant: 'destructive' });
@@ -173,15 +154,7 @@ export default function Inventory() {
   };
 
   const resetForm = () => {
-    setFormData({
-      name: '',
-      description: '',
-      category: '',
-      buy_price: '',
-      sell_price: '',
-      stock_quantity: '',
-      image_url: '',
-    });
+    setFormData({ name: '', description: '', category: '', buy_price: '', sell_price: '', stock_quantity: '', image_url: '' });
     setEditingProduct(null);
     setShowProductDialog(false);
   };
@@ -205,9 +178,7 @@ export default function Inventory() {
     p.category?.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-  };
+  const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
 
   if (loading) {
     return (
@@ -227,14 +198,14 @@ export default function Inventory() {
         action={
           <Dialog open={showProductDialog} onOpenChange={setShowProductDialog}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-gradient-gold shadow-gold" onClick={() => { resetForm(); setShowProductDialog(true); }}>
-                <Plus className="w-4 h-4 mr-1" />
-                Novo
+              <Button className="bg-gradient-gold shadow-gold" onClick={() => { resetForm(); setShowProductDialog(true); }}>
+                <Plus className="w-4 h-4 mr-2" />
+                Novo Produto
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-sm mx-4">
+            <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle className="font-display">
+                <DialogTitle className="font-display text-xl">
                   {editingProduct ? 'Editar Produto' : 'Novo Produto'}
                 </DialogTitle>
               </DialogHeader>
@@ -245,13 +216,13 @@ export default function Inventory() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Nome do produto"
-                    className="h-11"
+                    className="h-11 mt-1.5"
                   />
                 </div>
                 <div>
                   <Label>Categoria</Label>
                   <Select value={formData.category} onValueChange={(v) => setFormData({ ...formData, category: v })}>
-                    <SelectTrigger className="h-11">
+                    <SelectTrigger className="h-11 mt-1.5">
                       <SelectValue placeholder="Selecione" />
                     </SelectTrigger>
                     <SelectContent>
@@ -261,7 +232,7 @@ export default function Inventory() {
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="grid grid-cols-2 gap-3">
+                <div className="grid grid-cols-2 gap-4">
                   <div>
                     <Label>Custo (R$)</Label>
                     <Input 
@@ -270,7 +241,7 @@ export default function Inventory() {
                       value={formData.buy_price}
                       onChange={(e) => setFormData({ ...formData, buy_price: e.target.value })}
                       placeholder="0,00"
-                      className="h-11"
+                      className="h-11 mt-1.5"
                     />
                   </div>
                   <div>
@@ -281,7 +252,7 @@ export default function Inventory() {
                       value={formData.sell_price}
                       onChange={(e) => setFormData({ ...formData, sell_price: e.target.value })}
                       placeholder="0,00"
-                      className="h-11"
+                      className="h-11 mt-1.5"
                     />
                   </div>
                 </div>
@@ -292,7 +263,7 @@ export default function Inventory() {
                     value={formData.stock_quantity}
                     onChange={(e) => setFormData({ ...formData, stock_quantity: e.target.value })}
                     placeholder="0"
-                    className="h-11"
+                    className="h-11 mt-1.5"
                   />
                 </div>
                 <div>
@@ -302,6 +273,7 @@ export default function Inventory() {
                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                     placeholder="Descrição do produto..."
                     rows={2}
+                    className="mt-1.5"
                   />
                 </div>
                 <Button onClick={handleSaveProduct} className="w-full h-11 bg-gradient-gold">
@@ -314,39 +286,39 @@ export default function Inventory() {
       />
 
       {/* Search */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+      <div className="relative mb-6">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
         <Input 
           placeholder="Buscar produtos..."
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 h-11"
+          className="pl-12 h-12 text-base"
         />
       </div>
 
-      {/* Products List */}
-      <div className="space-y-3">
+      {/* Products Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredProducts.map((product) => (
-          <Card key={product.id} className="border-0 shadow-card overflow-hidden">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="w-14 h-14 rounded-lg bg-secondary flex items-center justify-center flex-shrink-0">
+          <Card key={product.id} className="border shadow-card overflow-hidden hover:shadow-soft transition-shadow">
+            <CardContent className="p-5">
+              <div className="flex items-start gap-4">
+                <div className="w-16 h-16 rounded-xl bg-secondary flex items-center justify-center flex-shrink-0">
                   {product.image_url ? (
-                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover rounded-lg" />
+                    <img src={product.image_url} alt={product.name} className="w-full h-full object-cover rounded-xl" />
                   ) : (
-                    <Package className="w-6 h-6 text-muted-foreground" />
+                    <Package className="w-7 h-7 text-muted-foreground" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-sm truncate">{product.name}</h3>
+                  <h3 className="font-semibold text-base truncate">{product.name}</h3>
                   {product.category && (
                     <span className="text-xs text-muted-foreground">{product.category}</span>
                   )}
-                  <div className="flex items-center gap-2 mt-1">
-                    <span className="text-sm font-semibold text-primary">
+                  <div className="flex items-center gap-2 mt-2">
+                    <span className="text-lg font-display font-semibold text-primary">
                       {formatCurrency(product.sell_price)}
                     </span>
-                    <span className={`text-xs px-2 py-0.5 rounded-full ${
+                    <span className={`text-xs font-medium px-2 py-1 rounded-full ${
                       product.stock_quantity < 3 
                         ? 'bg-destructive/10 text-destructive' 
                         : 'bg-secondary text-secondary-foreground'
@@ -355,79 +327,68 @@ export default function Inventory() {
                     </span>
                   </div>
                 </div>
-                <div className="flex flex-col gap-1">
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    className="h-8 w-8"
-                    onClick={() => openEditDialog(product)}
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    className="h-8 w-8 text-destructive hover:text-destructive"
-                    onClick={() => handleDeleteProduct(product.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
               </div>
               
-              {/* Stock Actions */}
-              <div className="flex gap-2 mt-3 pt-3 border-t">
+              {/* Actions */}
+              <div className="flex gap-2 mt-4 pt-4 border-t">
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="flex-1 h-9"
+                  className="flex-1 h-10"
                   onClick={() => {
                     setSelectedProduct(product);
                     setStockType('entry');
                     setShowStockDialog(true);
                   }}
                 >
-                  <ArrowUpCircle className="w-4 h-4 mr-1 text-green-600" />
+                  <ArrowUpCircle className="w-4 h-4 mr-1.5 text-green-600" />
                   Entrada
                 </Button>
                 <Button 
                   size="sm" 
                   variant="outline" 
-                  className="flex-1 h-9"
+                  className="flex-1 h-10"
                   onClick={() => {
                     setSelectedProduct(product);
                     setStockType('exit');
                     setShowStockDialog(true);
                   }}
                 >
-                  <ArrowDownCircle className="w-4 h-4 mr-1 text-red-500" />
+                  <ArrowDownCircle className="w-4 h-4 mr-1.5 text-destructive" />
                   Saída
+                </Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEditDialog(product)}>
+                  <Edit2 className="w-4 h-4" />
+                </Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 text-destructive hover:text-destructive" onClick={() => handleDeleteProduct(product.id)}>
+                  <Trash2 className="w-4 h-4" />
                 </Button>
               </div>
             </CardContent>
           </Card>
         ))}
-
-        {filteredProducts.length === 0 && (
-          <div className="text-center py-12">
-            <Package className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-            <p className="text-muted-foreground">Nenhum produto encontrado</p>
-          </div>
-        )}
       </div>
+
+      {filteredProducts.length === 0 && (
+        <div className="text-center py-16">
+          <Package className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <h3 className="font-display text-lg font-semibold mb-1">Nenhum produto encontrado</h3>
+          <p className="text-muted-foreground">Adicione seu primeiro produto clicando no botão acima.</p>
+        </div>
+      )}
 
       {/* Stock Movement Dialog */}
       <Dialog open={showStockDialog} onOpenChange={setShowStockDialog}>
-        <DialogContent className="max-w-sm mx-4">
+        <DialogContent className="max-w-sm">
           <DialogHeader>
-            <DialogTitle className="font-display">
+            <DialogTitle className="font-display text-xl">
               {stockType === 'entry' ? 'Entrada de Estoque' : 'Saída de Estoque'}
             </DialogTitle>
           </DialogHeader>
           <div className="space-y-4 mt-4">
-            <div className="p-3 bg-secondary rounded-lg">
-              <p className="font-medium text-sm">{selectedProduct?.name}</p>
-              <p className="text-xs text-muted-foreground">Estoque atual: {selectedProduct?.stock_quantity} un.</p>
+            <div className="p-4 bg-muted rounded-xl">
+              <p className="font-semibold">{selectedProduct?.name}</p>
+              <p className="text-sm text-muted-foreground">Estoque atual: {selectedProduct?.stock_quantity} un.</p>
             </div>
             <div>
               <Label>Quantidade</Label>
@@ -436,7 +397,7 @@ export default function Inventory() {
                 min="1"
                 value={stockQuantity}
                 onChange={(e) => setStockQuantity(parseInt(e.target.value) || 0)}
-                className="h-11"
+                className="h-11 mt-1.5"
               />
             </div>
             <div>
@@ -446,11 +407,12 @@ export default function Inventory() {
                 onChange={(e) => setStockNotes(e.target.value)}
                 placeholder="Opcional..."
                 rows={2}
+                className="mt-1.5"
               />
             </div>
             <Button 
               onClick={handleStockMovement} 
-              className={`w-full h-11 ${stockType === 'entry' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-500 hover:bg-red-600'}`}
+              className={`w-full h-11 ${stockType === 'entry' ? 'bg-green-600 hover:bg-green-700' : 'bg-destructive hover:bg-destructive/90'}`}
             >
               Confirmar {stockType === 'entry' ? 'Entrada' : 'Saída'}
             </Button>
