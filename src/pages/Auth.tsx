@@ -155,19 +155,7 @@ export default function Auth() {
               </Button>
             </form>
 
-            <div className="mt-8 text-center">
-              <button
-                type="button"
-                onClick={() => setIsLogin(!isLogin)}
-                className="text-sm text-muted-foreground hover:text-primary transition-colors"
-              >
-                {isLogin ? (
-                  <>Não tem conta? <span className="text-primary font-bold underline-offset-4 hover:underline">Criar agora</span></>
-                ) : (
-                  <>Já tem conta? <span className="text-primary font-bold underline-offset-4 hover:underline">Fazer login</span></>
-                )}
-              </button>
-            </div>
+           
           </CardContent>
         </Card>
       </div>
