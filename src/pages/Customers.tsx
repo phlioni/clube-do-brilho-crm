@@ -51,11 +51,7 @@ export default function Customers() {
   }, [user]);
 
   const fetchCustomers = async () => {
-    const { data, error } = await supabase
-      .from('customers')
-      .select('*')
-      .order('name');
-    
+    const { data, error } = await supabase.from('customers').select('*').order('name');
     if (error) {
       toast({ title: 'Erro', description: 'Não foi possível carregar os clientes', variant: 'destructive' });
     } else {
@@ -65,15 +61,8 @@ export default function Customers() {
   };
 
   const fetchCustomerSales = async (customerId: string) => {
-    const { data, error } = await supabase
-      .from('sales')
-      .select('*')
-      .eq('customer_id', customerId)
-      .order('created_at', { ascending: false });
-    
-    if (!error) {
-      setCustomerSales(data || []);
-    }
+    const { data, error } = await supabase.from('sales').select('*').eq('customer_id', customerId).order('created_at', { ascending: false });
+    if (!error) setCustomerSales(data || []);
   };
 
   const handleSaveCustomer = async () => {
@@ -91,11 +80,7 @@ export default function Customers() {
     };
 
     if (editingCustomer) {
-      const { error } = await supabase
-        .from('customers')
-        .update(customerData)
-        .eq('id', editingCustomer.id);
-
+      const { error } = await supabase.from('customers').update(customerData).eq('id', editingCustomer.id);
       if (error) {
         toast({ title: 'Erro', description: 'Não foi possível atualizar o cliente', variant: 'destructive' });
       } else {
@@ -104,10 +89,7 @@ export default function Customers() {
         resetForm();
       }
     } else {
-      const { error } = await supabase
-        .from('customers')
-        .insert([customerData]);
-
+      const { error } = await supabase.from('customers').insert([customerData]);
       if (error) {
         toast({ title: 'Erro', description: 'Não foi possível criar o cliente', variant: 'destructive' });
       } else {
@@ -120,7 +102,6 @@ export default function Customers() {
 
   const handleDeleteCustomer = async (id: string) => {
     const { error } = await supabase.from('customers').delete().eq('id', id);
-    
     if (error) {
       toast({ title: 'Erro', description: 'Não foi possível excluir o cliente', variant: 'destructive' });
     } else {
@@ -158,17 +139,8 @@ export default function Customers() {
     c.phone?.includes(searchTerm)
   );
 
-  const formatCurrency = (value: number) => {
-    return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
-  };
-
-  const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('pt-BR', {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-    });
-  };
+  const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
+  const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 
   if (loading) {
     return (
@@ -188,54 +160,33 @@ export default function Customers() {
         action={
           <Dialog open={showDialog} onOpenChange={setShowDialog}>
             <DialogTrigger asChild>
-              <Button size="sm" className="bg-gradient-gold shadow-gold" onClick={() => { resetForm(); setShowDialog(true); }}>
-                <Plus className="w-4 h-4 mr-1" />
-                Novo
+              <Button className="bg-gradient-gold shadow-gold" onClick={() => { resetForm(); setShowDialog(true); }}>
+                <Plus className="w-4 h-4 mr-2" />
+                Novo Cliente
               </Button>
             </DialogTrigger>
-            <DialogContent className="max-w-sm mx-4">
+            <DialogContent className="max-w-md">
               <DialogHeader>
-                <DialogTitle className="font-display">
+                <DialogTitle className="font-display text-xl">
                   {editingCustomer ? 'Editar Cliente' : 'Novo Cliente'}
                 </DialogTitle>
               </DialogHeader>
               <div className="space-y-4 mt-4">
                 <div>
                   <Label>Nome *</Label>
-                  <Input 
-                    value={formData.name}
-                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                    placeholder="Nome completo"
-                    className="h-11"
-                  />
+                  <Input value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} placeholder="Nome completo" className="h-11 mt-1.5" />
                 </div>
                 <div>
                   <Label>Telefone</Label>
-                  <Input 
-                    value={formData.phone}
-                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                    placeholder="(00) 00000-0000"
-                    className="h-11"
-                  />
+                  <Input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(00) 00000-0000" className="h-11 mt-1.5" />
                 </div>
                 <div>
                   <Label>Email</Label>
-                  <Input 
-                    type="email"
-                    value={formData.email}
-                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                    placeholder="email@exemplo.com"
-                    className="h-11"
-                  />
+                  <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="email@exemplo.com" className="h-11 mt-1.5" />
                 </div>
                 <div>
                   <Label>Observações</Label>
-                  <Textarea 
-                    value={formData.notes}
-                    onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-                    placeholder="Anotações sobre o cliente..."
-                    rows={3}
-                  />
+                  <Textarea value={formData.notes} onChange={(e) => setFormData({ ...formData, notes: e.target.value })} placeholder="Anotações sobre o cliente..." rows={3} className="mt-1.5" />
                 </div>
                 <Button onClick={handleSaveCustomer} className="w-full h-11 bg-gradient-gold">
                   {editingCustomer ? 'Salvar Alterações' : 'Cadastrar Cliente'}
@@ -247,117 +198,89 @@ export default function Customers() {
       />
 
       {/* Search */}
-      <div className="relative mb-4">
-        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
-        <Input 
-          placeholder="Buscar clientes..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          className="pl-10 h-11"
-        />
+      <div className="relative mb-6">
+        <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
+        <Input placeholder="Buscar clientes..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="pl-12 h-12 text-base" />
       </div>
 
-      {/* Customers List */}
-      <div className="space-y-3">
+      {/* Customers Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredCustomers.map((customer) => (
-          <Card key={customer.id} className="border-0 shadow-card">
-            <CardContent className="p-4">
-              <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-full bg-secondary flex items-center justify-center flex-shrink-0">
-                  <Users className="w-5 h-5 text-muted-foreground" />
+          <Card key={customer.id} className="border shadow-card hover:shadow-soft transition-shadow">
+            <CardContent className="p-5">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-full bg-gradient-blush flex items-center justify-center flex-shrink-0">
+                  <Users className="w-5 h-5 text-secondary-foreground" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="font-medium text-sm truncate">{customer.name}</h3>
+                  <h3 className="font-semibold text-base truncate">{customer.name}</h3>
                   {customer.phone && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-                      <Phone className="w-3 h-3" />
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-1">
+                      <Phone className="w-3.5 h-3.5" />
                       <span>{customer.phone}</span>
                     </div>
                   )}
                   {customer.email && (
-                    <div className="flex items-center gap-1 text-xs text-muted-foreground mt-0.5">
-                      <Mail className="w-3 h-3" />
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground mt-0.5">
+                      <Mail className="w-3.5 h-3.5" />
                       <span className="truncate">{customer.email}</span>
                     </div>
                   )}
                 </div>
-                <div className="flex flex-col gap-1">
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    className="h-8 w-8"
-                    onClick={() => openHistoryDialog(customer)}
-                  >
-                    <ShoppingBag className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    className="h-8 w-8"
-                    onClick={() => openEditDialog(customer)}
-                  >
-                    <Edit2 className="w-4 h-4" />
-                  </Button>
-                  <Button 
-                    size="icon" 
-                    variant="ghost" 
-                    className="h-8 w-8 text-destructive hover:text-destructive"
-                    onClick={() => handleDeleteCustomer(customer.id)}
-                  >
-                    <Trash2 className="w-4 h-4" />
-                  </Button>
-                </div>
               </div>
+              
               {customer.notes && (
-                <p className="text-xs text-muted-foreground mt-3 pt-3 border-t line-clamp-2">
-                  {customer.notes}
-                </p>
+                <p className="text-sm text-muted-foreground mt-4 pt-4 border-t line-clamp-2">{customer.notes}</p>
               )}
+              
+              <div className="flex gap-2 mt-4 pt-4 border-t">
+                <Button size="sm" variant="outline" className="flex-1 h-10" onClick={() => openHistoryDialog(customer)}>
+                  <ShoppingBag className="w-4 h-4 mr-1.5" />
+                  Histórico
+                </Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10" onClick={() => openEditDialog(customer)}>
+                  <Edit2 className="w-4 h-4" />
+                </Button>
+                <Button size="icon" variant="ghost" className="h-10 w-10 text-destructive hover:text-destructive" onClick={() => handleDeleteCustomer(customer.id)}>
+                  <Trash2 className="w-4 h-4" />
+                </Button>
+              </div>
             </CardContent>
           </Card>
         ))}
-
-        {filteredCustomers.length === 0 && (
-          <div className="text-center py-12">
-            <Users className="w-12 h-12 text-muted-foreground mx-auto mb-3" />
-            <p className="text-muted-foreground">Nenhum cliente encontrado</p>
-          </div>
-        )}
       </div>
+
+      {filteredCustomers.length === 0 && (
+        <div className="text-center py-16">
+          <Users className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
+          <h3 className="font-display text-lg font-semibold mb-1">Nenhum cliente encontrado</h3>
+          <p className="text-muted-foreground">Adicione seu primeiro cliente clicando no botão acima.</p>
+        </div>
+      )}
 
       {/* Purchase History Dialog */}
       <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
-        <DialogContent className="max-w-sm mx-4">
+        <DialogContent className="max-w-md">
           <DialogHeader>
-            <DialogTitle className="font-display">
-              Histórico de Compras
-            </DialogTitle>
+            <DialogTitle className="font-display text-xl">Histórico de Compras</DialogTitle>
           </DialogHeader>
           <div className="mt-4">
-            <div className="p-3 bg-secondary rounded-lg mb-4">
-              <p className="font-medium text-sm">{selectedCustomer?.name}</p>
-              <p className="text-xs text-muted-foreground">
-                {customerSales.length} compras realizadas
-              </p>
+            <div className="p-4 bg-muted rounded-xl mb-4">
+              <p className="font-semibold">{selectedCustomer?.name}</p>
+              <p className="text-sm text-muted-foreground">{customerSales.length} compras realizadas</p>
             </div>
             
             {customerSales.length > 0 ? (
-              <div className="space-y-2 max-h-64 overflow-y-auto">
+              <div className="space-y-2 max-h-80 overflow-y-auto">
                 {customerSales.map((sale) => (
-                  <div key={sale.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                    <span className="text-xs text-muted-foreground">
-                      {formatDate(sale.created_at)}
-                    </span>
-                    <span className="font-semibold text-sm text-primary">
-                      {formatCurrency(sale.total_amount)}
-                    </span>
+                  <div key={sale.id} className="flex items-center justify-between p-4 bg-card border rounded-xl">
+                    <span className="text-sm text-muted-foreground">{formatDate(sale.created_at)}</span>
+                    <span className="font-display font-semibold text-primary">{formatCurrency(sale.total_amount)}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-center text-muted-foreground py-8 text-sm">
-                Nenhuma compra registrada
-              </p>
+              <p className="text-center text-muted-foreground py-8">Nenhuma compra registrada</p>
             )}
           </div>
         </DialogContent>
