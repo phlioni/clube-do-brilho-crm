@@ -1,13 +1,12 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { LayoutDashboard, Package, Users, LogOut, Sparkles, ShoppingCart, Menu } from 'lucide-react';
+import { LayoutDashboard, Package, Users, LogOut, ShoppingCart, Menu } from 'lucide-react'; // Removido Sparkles
 import {
   Sidebar,
   SidebarContent,
   SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
@@ -35,19 +34,20 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar">
-      <SidebarHeader className="p-6">
-        <Link to="/" className="flex items-center gap-3 group">
-          <div className="w-10 h-10 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-soft flex-shrink-0 transition-transform group-hover:scale-105">
-            <Sparkles className="w-5 h-5" />
-          </div>
+      <SidebarHeader className="p-4">
+        <Link to="/" className={`flex items-center gap-3 group ${isCollapsed ? 'justify-center' : ''}`}>
+          {/* LOGO NO SIDEBAR */}
+          <img
+            src="/logo.png"
+            alt="Logo"
+            className={`transition-all object-contain ${isCollapsed ? 'h-8 w-8' : 'h-10 w-10'}`}
+          />
+
           {!isCollapsed && (
             <div className="animate-fade-in flex flex-col">
-              <h1 className="font-display text-lg font-semibold text-sidebar-foreground tracking-tight">
+              <h1 className="font-display text-lg font-bold text-primary tracking-tight leading-none">
                 Clube do Brilho
               </h1>
-              <span className="text-[10px] font-bold tracking-widest text-muted-foreground uppercase">
-                Gerenciador
-              </span>
             </div>
           )}
         </Link>
@@ -55,11 +55,8 @@ export function AppSidebar() {
 
       <SidebarContent className="px-3 py-2">
         <SidebarGroup>
-          <SidebarGroupLabel className="px-3 mb-2 text-[11px] font-bold text-muted-foreground/70 uppercase tracking-widest">
-            Principal
-          </SidebarGroupLabel>
           <SidebarGroupContent>
-            <SidebarMenu className="gap-1">
+            <SidebarMenu className="gap-1.5">
               {navItems.map((item) => {
                 const Icon = item.icon;
                 const active = isActive(item.path);
@@ -70,13 +67,13 @@ export function AppSidebar() {
                       asChild
                       isActive={active}
                       tooltip={item.label}
-                      className={`h-12 px-4 rounded-xl transition-all duration-200 ${active
-                          ? 'bg-primary text-primary-foreground shadow-soft font-medium'
-                          : 'text-sidebar-foreground/70 hover:bg-sidebar-accent hover:text-sidebar-foreground'
+                      className={`h-11 px-4 rounded-lg transition-all duration-200 font-medium ${active
+                          ? 'bg-sidebar-primary text-sidebar-primary-foreground shadow-sm'
+                          : 'text-sidebar-foreground/80 hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                         }`}
                     >
                       <Link to={item.path} className="flex items-center gap-3">
-                        <Icon className={`w-[20px] h-[20px] ${active ? 'text-primary-foreground' : 'text-muted-foreground'}`} />
+                        <Icon className={`w-[18px] h-[18px] ${active ? 'text-sidebar-primary-foreground' : 'text-muted-foreground'}`} />
                         <span className="text-[14px]">{item.label}</span>
                       </Link>
                     </SidebarMenuButton>
@@ -93,16 +90,18 @@ export function AppSidebar() {
       </div>
 
       <SidebarFooter className="p-4 pt-0">
-        <div className={`flex items-center gap-3 p-3 rounded-xl bg-sidebar-accent/50 border border-sidebar-border ${isCollapsed ? 'justify-center p-2' : ''}`}>
-          <div className="w-8 h-8 rounded-full bg-champagne text-champagne-dark flex items-center justify-center flex-shrink-0 text-xs font-bold ring-2 ring-background">
+        <div className={`flex items-center gap-3 p-3 rounded-xl bg-sidebar-accent/40 border border-sidebar-border ${isCollapsed ? 'justify-center p-2' : ''}`}>
+          <div className="w-9 h-9 rounded-full bg-primary text-primary-foreground flex items-center justify-center flex-shrink-0 text-sm font-bold ring-2 ring-background font-display">
             {user?.email?.charAt(0).toUpperCase() || 'U'}
           </div>
           {!isCollapsed && (
             <div className="flex-1 min-w-0 animate-fade-in">
-              <p className="text-sm font-semibold text-sidebar-foreground truncate leading-none mb-1">
+              <p className="text-sm font-semibold text-sidebar-foreground truncate leading-none mb-1.5">
                 {user?.email?.split('@')[0]}
               </p>
-              <p className="text-[10px] text-muted-foreground truncate">Logado</p>
+              <p className="text-[11px] text-muted-foreground truncate flex items-center gap-1">
+                <span className="w-2 h-2 rounded-full bg-green-500 inline-block"></span> Online
+              </p>
             </div>
           )}
         </div>
@@ -111,11 +110,11 @@ export function AppSidebar() {
           variant="ghost"
           size={isCollapsed ? 'icon' : 'default'}
           onClick={signOut}
-          className={`mt-2 h-10 rounded-xl text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors ${isCollapsed ? 'w-full justify-center' : 'w-full justify-start'
+          className={`mt-3 h-10 rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors border border-transparent hover:border-destructive/20 ${isCollapsed ? 'w-full justify-center' : 'w-full justify-start'
             }`}
         >
-          <LogOut className="w-4 h-4" />
-          {!isCollapsed && <span className="ml-2 text-sm font-medium">Sair da conta</span>}
+          <LogOut className="w-5 h-5" />
+          {!isCollapsed && <span className="ml-2 text-sm font-medium">Sair do sistema</span>}
         </Button>
       </SidebarFooter>
     </Sidebar>
@@ -124,16 +123,19 @@ export function AppSidebar() {
 
 export function MobileHeader() {
   return (
-    <header className="md:hidden fixed top-0 left-0 right-0 z-50 h-16 glass flex items-center px-4 justify-between transition-all duration-200">
+    <header className="md:hidden fixed top-0 left-0 right-0 z-50 h-16 glass flex items-center px-4 justify-between transition-all duration-200 border-b border-border/50">
       <div className="flex items-center gap-3">
-        <SidebarTrigger className="h-10 w-10 rounded-xl hover:bg-secondary/80">
-          <Menu className="w-5 h-5 text-foreground" />
+        <SidebarTrigger className="h-10 w-10 rounded-lg hover:bg-secondary/80 text-primary">
+          <Menu className="w-6 h-6" />
         </SidebarTrigger>
-        <span className="font-display text-lg font-semibold text-foreground tracking-tight">Clube do Brilho</span>
+        <span className="font-display text-lg font-bold text-primary tracking-tight">Clube do Brilho</span>
       </div>
-      <div className="w-9 h-9 rounded-xl bg-primary text-primary-foreground flex items-center justify-center shadow-soft">
-        <Sparkles className="w-4 h-4" />
-      </div>
+      {/* LOGO NO MOBILE HEADER (Canto direito) */}
+      <img
+        src="/logo.png"
+        alt="Logo"
+        className="h-8 w-auto object-contain drop-shadow-sm"
+      />
     </header>
   );
 }

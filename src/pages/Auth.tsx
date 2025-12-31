@@ -5,10 +5,11 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Sparkles, Eye, EyeOff } from 'lucide-react';
+import { Eye, EyeOff } from 'lucide-react'; // Removido Sparkles
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 
+// Schema de validação (mantido)
 const authSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
@@ -47,11 +48,7 @@ export default function Auth() {
           if (error.message.includes('Invalid login credentials')) {
             message = 'Email ou senha incorretos';
           }
-          toast({
-            title: 'Erro',
-            description: message,
-            variant: 'destructive',
-          });
+          toast({ title: 'Erro', description: message, variant: 'destructive' });
         } else {
           navigate('/');
         }
@@ -62,60 +59,62 @@ export default function Auth() {
           if (error.message.includes('already registered')) {
             message = 'Este email já está cadastrado';
           }
-          toast({
-            title: 'Erro',
-            description: message,
-            variant: 'destructive',
-          });
+          toast({ title: 'Erro', description: message, variant: 'destructive' });
         } else {
-          toast({
-            title: 'Conta criada!',
-            description: 'Você já pode acessar o app.',
-          });
+          toast({ title: 'Conta criada!', description: 'Você já pode acessar o app.' });
           navigate('/');
         }
       }
     } catch (error) {
-      toast({
-        title: 'Erro',
-        description: 'Algo deu errado. Tente novamente.',
-        variant: 'destructive',
-      });
+      toast({ title: 'Erro', description: 'Algo deu errado. Tente novamente.', variant: 'destructive' });
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4">
-      {/* Decorative background */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute top-0 right-0 w-96 h-96 bg-secondary rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2" />
-        <div className="absolute bottom-0 left-0 w-96 h-96 bg-accent rounded-full blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2" />
+    // Container principal com a nova cor de fundo (se houver) e overflow hidden
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 relative overflow-hidden">
+      {/* Background decorativo fixo com a nova paleta */}
+      <div className="fixed inset-0 overflow-hidden pointer-events-none">
+        <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2" />
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-champagne/30 rounded-full blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2" />
       </div>
 
       <div className="w-full max-w-sm relative z-10 animate-fade-in">
-        {/* Logo/Brand */}
-        <div className="text-center mb-10">
-          <div className="inline-flex items-center justify-center w-20 h-20 rounded-2xl bg-gradient-gold shadow-gold mb-5">
-            <Sparkles className="w-10 h-10 text-primary-foreground" />
-          </div>
-          <h1 className="text-4xl font-display font-bold text-foreground tracking-tight">
+        {/* Logo e Título */}
+        <div className="text-center mb-8">
+          {/* Substituição do ícone pela LOGO */}
+          <img
+            src="/logo.png"
+            alt="Clube do Brilho Logo"
+            className="h-24 w-auto mx-auto mb-4 object-contain drop-shadow-md"
+            onError={(e) => {
+              // Fallback caso a imagem não seja encontrada na pasta public
+              e.currentTarget.style.display = 'none';
+              toast({ title: 'Aviso', description: 'Logo não encontrada em /public/logo.png', variant: 'default' });
+            }}
+          />
+
+          <h1 className="text-3xl font-display font-bold text-primary tracking-tight">
             Clube do Brilho
           </h1>
           <p className="text-muted-foreground mt-2">
-            Gerencie suas semijoias com elegância
+            Gestão de semijoias com elegância
           </p>
         </div>
 
-        <Card className="border-0 shadow-soft bg-card/80 backdrop-blur">
-          <CardHeader className="space-y-1 pb-6 text-center">
+        <Card className="border-0 shadow-medium bg-card/90 backdrop-blur-sm relative overflow-hidden">
+          {/* Barra superior colorida no card */}
+          <div className="absolute top-0 left-0 right-0 h-1.5 bg-primary" />
+
+          <CardHeader className="space-y-1 pb-6 text-center pt-8">
             <CardTitle className="text-2xl font-display">
-              {isLogin ? 'Entrar' : 'Criar conta'}
+              {isLogin ? 'Bem-vindo(a)' : 'Criar conta'}
             </CardTitle>
             <CardDescription>
               {isLogin
-                ? 'Acesse sua conta para continuar'
+                ? 'Insira suas credenciais para acessar'
                 : 'Preencha os dados para começar'
               }
             </CardDescription>
@@ -123,7 +122,7 @@ export default function Auth() {
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-5">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">Email</Label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   id="email"
                   type="email"
@@ -131,11 +130,11 @@ export default function Auth() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-12 text-base"
+                  className="h-12"
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">Senha</Label>
+                <Label htmlFor="password">Senha</Label>
                 <div className="relative">
                   <Input
                     id="password"
@@ -144,12 +143,12 @@ export default function Auth() {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
-                    className="h-12 text-base pr-12"
+                    className="h-12 pr-12"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                    className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-primary transition-colors"
                   >
                     {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
                   </button>
@@ -157,10 +156,10 @@ export default function Auth() {
               </div>
               <Button
                 type="submit"
-                className="w-full h-12 text-base bg-gradient-gold hover:opacity-90 text-primary-foreground font-semibold shadow-gold transition-all"
+                className="w-full h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-primary text-primary-foreground hover:bg-primary/90"
                 disabled={loading}
               >
-                {loading ? 'Carregando...' : isLogin ? 'Entrar' : 'Criar conta'}
+                {loading ? 'Carregando...' : isLogin ? 'Entrar no Sistema' : 'Cadastrar'}
               </Button>
             </form>
 
@@ -170,7 +169,11 @@ export default function Auth() {
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-
+                {isLogin ? (
+                  <>Não tem conta? <span className="text-primary font-bold underline-offset-4 hover:underline">Criar agora</span></>
+                ) : (
+                  <>Já tem conta? <span className="text-primary font-bold underline-offset-4 hover:underline">Fazer login</span></>
+                )}
               </button>
             </div>
           </CardContent>

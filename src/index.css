@@ -2,32 +2,36 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Clube do Brilho Design System v2.2 (New Brand Color #7B3A3A) */
+
 @layer base {
   :root {
     /* Base - Warm White (Pedra clara) */
-    --background: 60 5% 96%;
-    --foreground: 24 10% 10%;
+    --background: 60 5% 97%;
+    --foreground: 24 5% 15%;
 
     /* Cards - Pure White */
     --card: 0 0% 100%;
-    --card-foreground: 24 10% 10%;
+    --card-foreground: 24 5% 15%;
 
     --popover: 0 0% 100%;
-    --popover-foreground: 24 10% 10%;
+    --popover-foreground: 24 5% 15%;
 
-    /* Primary - Absolute Black for Buttons */
-    --primary: 0 0% 0%;
+    /* Primary - NOVA COR VINHO (#7B3A3A) converted to HSL */
+    /* Usamos um tom ligeiramente mais claro para melhor leitura em fundos claros, 
+       e o texto sobre ele será branco */
+    --primary: 358 36% 45%; 
     --primary-foreground: 0 0% 100%;
 
     /* Secondary - Stone Grey */
-    --secondary: 60 5% 90%;
-    --secondary-foreground: 24 10% 10%;
+    --secondary: 60 5% 92%;
+    --secondary-foreground: 24 5% 15%;
 
     /* Muted */
-    --muted: 60 5% 90%;
-    --muted-foreground: 24 5% 45%;
+    --muted: 60 5% 92%;
+    --muted-foreground: 24 5% 50%;
 
-    /* Accent - Champagne/Bronze */
+    /* Accent - Champagne/Bronze (Mantido para detalhes de luxo) */
     --accent: 36 30% 45%;
     --accent-foreground: 0 0% 100%;
 
@@ -36,46 +40,48 @@
     --destructive-foreground: 0 0% 100%;
 
     /* Borders */
-    --border: 60 5% 85%; /* Mais escuro para ser visível */
-    --input: 60 5% 85%;
-    --ring: 24 10% 10%;
+    --border: 60 5% 88%;
+    --input: 60 5% 88%;
+    --ring: 358 36% 45%; /* Ring da cor primária */
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
     /* Custom Luxury Colors */
-    --champagne: 36 30% 45%;      /* Bronze elegante (fundo escuro) */
-    --champagne-light: 36 20% 90%; /* Bege claro (fundo claro) */
+    --champagne: 36 30% 45%;      
+    --champagne-light: 36 25% 85%; 
     --champagne-dark: 36 30% 30%;
 
-    /* Sidebar */
+    /* Sidebar - Clean Light */
     --sidebar-background: 0 0% 100%;
-    --sidebar-foreground: 24 5% 20%;
-    --sidebar-primary: 0 0% 0%;
+    --sidebar-foreground: 24 5% 30%;
+    /* Item ativo no menu agora será Vinho com texto branco */
+    --sidebar-primary: 358 36% 45%; 
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 60 5% 95%;
-    --sidebar-accent-foreground: 0 0% 0%;
-    --sidebar-border: 60 5% 90%;
-    --sidebar-ring: 0 0% 0%;
+    --sidebar-accent-foreground: 358 36% 45%;
+    --sidebar-border: 60 5% 92%;
+    --sidebar-ring: 358 36% 45%;
   }
 
   .dark {
-    --background: 24 10% 10%;
+    /* Dark Mode adaptado para o tom vinho */
+    --background: 24 5% 10%;
     --foreground: 60 5% 96%;
-    --card: 24 10% 12%;
+    --card: 24 5% 13%;
     --card-foreground: 60 5% 96%;
-    --primary: 60 5% 96%;
-    --primary-foreground: 24 10% 10%;
+    --primary: 358 36% 55%; /* Vinho um pouco mais claro no dark mode */
+    --primary-foreground: 0 0% 100%;
     --secondary: 24 5% 18%;
     --secondary-foreground: 60 5% 96%;
     --muted: 24 5% 18%;
     --muted-foreground: 24 5% 65%;
     --accent: 36 30% 45%;
-    --accent-foreground: 60 5% 96%;
+    --accent-foreground: 0 0% 100%;
     --destructive: 0 62% 30%;
     --destructive-foreground: 60 5% 96%;
     --border: 24 5% 18%;
     --input: 24 5% 18%;
-    --ring: 60 5% 96%;
+    --ring: 358 36% 55%;
   }
 }
 
@@ -97,9 +103,9 @@
   .font-display { font-family: 'Playfair Display', Georgia, serif; }
   .font-sans { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
   
-  /* Fallback para classes antigas */
+  /* Atualizando o gradiente para usar a nova cor primária (vinho) */
   .bg-gradient-gold {
-    @apply bg-champagne text-white; /* Substitui gradiente por cor sólida legível */
+    @apply bg-primary text-primary-foreground; 
   }
   
   .glass { @apply bg-white/90 backdrop-blur-md border-b border-black/5; }
