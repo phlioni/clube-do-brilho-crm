@@ -1,6 +1,6 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { LayoutDashboard, Package, Users, LogOut, ShoppingCart, Menu } from 'lucide-react'; // Removido Sparkles
+import { LayoutDashboard, Package, Users, LogOut, ShoppingCart, Menu } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -34,13 +34,15 @@ export function AppSidebar() {
 
   return (
     <Sidebar collapsible="icon" className="border-r border-sidebar-border bg-sidebar">
-      <SidebarHeader className="p-4">
-        <Link to="/" className={`flex items-center gap-3 group ${isCollapsed ? 'justify-center' : ''}`}>
-          {/* LOGO NO SIDEBAR */}
+      {/* Ajuste de padding do header para acomodar logo maior */}
+      <SidebarHeader className="p-4 pb-2">
+        <Link to="/" className={`flex items-center gap-4 group ${isCollapsed ? 'justify-center' : ''}`}>
+          {/* LOGO AUMENTADA NO SIDEBAR */}
           <img
             src="/logo.png"
-            alt="Logo"
-            className={`transition-all object-contain ${isCollapsed ? 'h-8 w-8' : 'h-10 w-10'}`}
+            alt="Logo Clube do Brilho"
+            // Expandido: h-16 (64px), Recolhido: h-12 w-12 (48px)
+            className={`transition-all duration-300 object-contain ${isCollapsed ? 'h-12 w-12' : 'h-16 w-auto'}`}
           />
 
           {!isCollapsed && (
@@ -53,7 +55,7 @@ export function AppSidebar() {
         </Link>
       </SidebarHeader>
 
-      <SidebarContent className="px-3 py-2">
+      <SidebarContent className="px-3 py-2 mt-2">
         <SidebarGroup>
           <SidebarGroupContent>
             <SidebarMenu className="gap-1.5">
@@ -130,11 +132,11 @@ export function MobileHeader() {
         </SidebarTrigger>
         <span className="font-display text-lg font-bold text-primary tracking-tight">Clube do Brilho</span>
       </div>
-      {/* LOGO NO MOBILE HEADER (Canto direito) */}
+      {/* LOGO AUMENTADA NO MOBILE HEADER (h-12) */}
       <img
         src="/logo.png"
-        alt="Logo"
-        className="h-8 w-auto object-contain drop-shadow-sm"
+        alt="Logo Clube do Brilho"
+        className="h-12 w-auto object-contain drop-shadow-sm"
       />
     </header>
   );

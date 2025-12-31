@@ -5,11 +5,10 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff } from 'lucide-react'; // Removido Sparkles
+import { Eye, EyeOff } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { z } from 'zod';
 
-// Schema de validação (mantido)
 const authSchema = z.object({
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'A senha deve ter no mínimo 6 caracteres'),
@@ -27,7 +26,7 @@ export default function Auth() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     const validation = authSchema.safeParse({ email, password });
     if (!validation.success) {
       toast({
@@ -73,9 +72,8 @@ export default function Auth() {
   };
 
   return (
-    // Container principal com a nova cor de fundo (se houver) e overflow hidden
     <div className="min-h-screen flex flex-col items-center justify-center bg-background px-4 relative overflow-hidden">
-      {/* Background decorativo fixo com a nova paleta */}
+      {/* Background decorativo fixo */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-0 right-0 w-96 h-96 bg-primary/20 rounded-full blur-3xl opacity-50 -translate-y-1/2 translate-x-1/2" />
         <div className="absolute bottom-0 left-0 w-96 h-96 bg-champagne/30 rounded-full blur-3xl opacity-50 translate-y-1/2 -translate-x-1/2" />
@@ -84,37 +82,31 @@ export default function Auth() {
       <div className="w-full max-w-sm relative z-10 animate-fade-in">
         {/* Logo e Título */}
         <div className="text-center mb-8">
-          {/* Substituição do ícone pela LOGO */}
-          <img
-            src="/logo.png"
-            alt="Clube do Brilho Logo"
-            className="h-24 w-auto mx-auto mb-4 object-contain drop-shadow-md"
+          {/* LOGO AUMENTADA AQUI (h-40) */}
+          <img 
+            src="/logo.png" 
+            alt="Clube do Brilho Logo" 
+            className="h-52 w-auto mx-auto mb-1 object-contain drop-shadow-md transition-transform hover:scale-105"
             onError={(e) => {
-              // Fallback caso a imagem não seja encontrada na pasta public
               e.currentTarget.style.display = 'none';
-              toast({ title: 'Aviso', description: 'Logo não encontrada em /public/logo.png', variant: 'default' });
             }}
           />
-
-          <h1 className="text-3xl font-display font-bold text-primary tracking-tight">
-            Clube do Brilho
-          </h1>
+          
           <p className="text-muted-foreground mt-2">
             Gestão de semijoias com elegância
           </p>
         </div>
 
         <Card className="border-0 shadow-medium bg-card/90 backdrop-blur-sm relative overflow-hidden">
-          {/* Barra superior colorida no card */}
           <div className="absolute top-0 left-0 right-0 h-1.5 bg-primary" />
-
+          
           <CardHeader className="space-y-1 pb-6 text-center pt-8">
             <CardTitle className="text-2xl font-display">
               {isLogin ? 'Bem-vindo(a)' : 'Criar conta'}
             </CardTitle>
             <CardDescription>
-              {isLogin
-                ? 'Insira suas credenciais para acessar'
+              {isLogin 
+                ? 'Insira suas credenciais para acessar' 
                 : 'Preencha os dados para começar'
               }
             </CardDescription>
@@ -154,8 +146,8 @@ export default function Auth() {
                   </button>
                 </div>
               </div>
-              <Button
-                type="submit"
+              <Button 
+                type="submit" 
                 className="w-full h-12 text-base font-semibold shadow-md hover:shadow-lg transition-all bg-primary text-primary-foreground hover:bg-primary/90"
                 disabled={loading}
               >
