@@ -2,77 +2,80 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Clube do Brilho Design System
-   Elegant gold, soft pink, and white palette for a luxury jewelry store
-   Fonts: Cormorant Garamond (display) + DM Sans (body)
-*/
-
 @layer base {
   :root {
-    /* Cream/Off-white backgrounds */
-    --background: 45 30% 98%;
-    --foreground: 30 15% 18%;
+    /* Base - Warm White (Pedra clara) */
+    --background: 60 5% 96%;
+    --foreground: 24 10% 10%;
 
-    /* Warm white cards */
-    --card: 45 40% 99%;
-    --card-foreground: 30 15% 18%;
+    /* Cards - Pure White */
+    --card: 0 0% 100%;
+    --card-foreground: 24 10% 10%;
 
-    --popover: 45 40% 99%;
-    --popover-foreground: 30 15% 18%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 24 10% 10%;
 
-    /* Rich gold primary */
-    --primary: 45 70% 42%;
-    --primary-foreground: 45 40% 99%;
+    /* Primary - Absolute Black for Buttons */
+    --primary: 0 0% 0%;
+    --primary-foreground: 0 0% 100%;
 
-    /* Soft blush pink secondary */
-    --secondary: 355 50% 95%;
-    --secondary-foreground: 355 35% 35%;
+    /* Secondary - Stone Grey */
+    --secondary: 60 5% 90%;
+    --secondary-foreground: 24 10% 10%;
 
-    /* Muted warm tones */
-    --muted: 45 15% 93%;
-    --muted-foreground: 30 10% 50%;
+    /* Muted */
+    --muted: 60 5% 90%;
+    --muted-foreground: 24 5% 45%;
 
-    /* Rose gold accent */
-    --accent: 20 50% 90%;
-    --accent-foreground: 20 45% 30%;
+    /* Accent - Champagne/Bronze */
+    --accent: 36 30% 45%;
+    --accent-foreground: 0 0% 100%;
 
-    /* Destructive - soft coral */
-    --destructive: 0 60% 50%;
+    /* Destructive */
+    --destructive: 0 84% 60%;
     --destructive-foreground: 0 0% 100%;
 
-    /* Border and inputs */
-    --border: 45 25% 88%;
-    --input: 45 25% 88%;
-    --ring: 45 70% 42%;
+    /* Borders */
+    --border: 60 5% 85%; /* Mais escuro para ser visível */
+    --input: 60 5% 85%;
+    --ring: 24 10% 10%;
 
-    --radius: 0.625rem;
+    --radius: 0.5rem;
 
-    /* Chart colors */
-    --chart-1: 45 70% 42%;
-    --chart-2: 355 50% 70%;
-    --chart-3: 20 50% 75%;
-    --chart-4: 45 40% 60%;
-    --chart-5: 30 30% 55%;
-
-    /* Custom variables */
-    --gold: 45 70% 42%;
-    --gold-light: 47 75% 70%;
-    --gold-dark: 42 65% 32%;
-    --blush: 355 50% 92%;
-    --blush-dark: 355 40% 72%;
-    --rose-gold: 20 50% 70%;
-    --cream: 45 30% 98%;
-    --warm-white: 45 40% 99%;
+    /* Custom Luxury Colors */
+    --champagne: 36 30% 45%;      /* Bronze elegante (fundo escuro) */
+    --champagne-light: 36 20% 90%; /* Bege claro (fundo claro) */
+    --champagne-dark: 36 30% 30%;
 
     /* Sidebar */
-    --sidebar-background: 45 25% 97%;
-    --sidebar-foreground: 30 15% 25%;
-    --sidebar-primary: 45 70% 42%;
-    --sidebar-primary-foreground: 45 40% 99%;
-    --sidebar-accent: 355 50% 95%;
-    --sidebar-accent-foreground: 355 35% 30%;
-    --sidebar-border: 45 20% 90%;
-    --sidebar-ring: 45 70% 42%;
+    --sidebar-background: 0 0% 100%;
+    --sidebar-foreground: 24 5% 20%;
+    --sidebar-primary: 0 0% 0%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 60 5% 95%;
+    --sidebar-accent-foreground: 0 0% 0%;
+    --sidebar-border: 60 5% 90%;
+    --sidebar-ring: 0 0% 0%;
+  }
+
+  .dark {
+    --background: 24 10% 10%;
+    --foreground: 60 5% 96%;
+    --card: 24 10% 12%;
+    --card-foreground: 60 5% 96%;
+    --primary: 60 5% 96%;
+    --primary-foreground: 24 10% 10%;
+    --secondary: 24 5% 18%;
+    --secondary-foreground: 60 5% 96%;
+    --muted: 24 5% 18%;
+    --muted-foreground: 24 5% 65%;
+    --accent: 36 30% 45%;
+    --accent-foreground: 60 5% 96%;
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 60 5% 96%;
+    --border: 24 5% 18%;
+    --input: 24 5% 18%;
+    --ring: 60 5% 96%;
   }
 }
 
@@ -80,108 +83,24 @@
   * {
     @apply border-border;
   }
-
   body {
     @apply bg-background text-foreground antialiased;
-    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
   }
-
   h1, h2, h3, h4, h5, h6 {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-    font-weight: 600;
-    letter-spacing: -0.01em;
+    font-family: 'Playfair Display', Georgia, serif;
+    @apply tracking-tight font-medium;
   }
 }
 
 @layer utilities {
-  .font-display {
-    font-family: 'Cormorant Garamond', Georgia, serif;
-  }
-
-  .font-sans {
-    font-family: 'DM Sans', system-ui, -apple-system, sans-serif;
-  }
-
+  .font-display { font-family: 'Playfair Display', Georgia, serif; }
+  .font-sans { font-family: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif; }
+  
+  /* Fallback para classes antigas */
   .bg-gradient-gold {
-    background: linear-gradient(135deg, hsl(47 75% 55%) 0%, hsl(45 70% 42%) 50%, hsl(42 65% 35%) 100%);
+    @apply bg-champagne text-white; /* Substitui gradiente por cor sólida legível */
   }
-
-  .bg-gradient-blush {
-    background: linear-gradient(135deg, hsl(355 50% 95%) 0%, hsl(355 45% 88%) 100%);
-  }
-
-  .bg-gradient-rose {
-    background: linear-gradient(135deg, hsl(20 50% 90%) 0%, hsl(355 45% 85%) 100%);
-  }
-
-  .shadow-gold {
-    box-shadow: 0 4px 20px -4px hsl(45 70% 42% / 0.3);
-  }
-
-  .shadow-soft {
-    box-shadow: 0 4px 16px -4px hsl(30 15% 18% / 0.1);
-  }
-
-  .shadow-card {
-    box-shadow: 0 2px 12px -4px hsl(30 15% 18% / 0.08);
-  }
-
-  .text-gold {
-    color: hsl(var(--gold));
-  }
-
-  .text-gold-dark {
-    color: hsl(var(--gold-dark));
-  }
-
-  .bg-gold {
-    background-color: hsl(var(--gold));
-  }
-
-  .bg-gold-light {
-    background-color: hsl(var(--gold-light));
-  }
-
-  .bg-blush {
-    background-color: hsl(var(--blush));
-  }
-
-  .bg-rose-gold {
-    background-color: hsl(var(--rose-gold));
-  }
-
-  .border-gold {
-    border-color: hsl(var(--gold));
-  }
-
-  /* Glass morphism effect */
-  .glass {
-    background: hsl(var(--warm-white) / 0.85);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-  }
-
-  /* Touch-friendly tap targets */
-  .touch-target {
-    min-height: 44px;
-    min-width: 44px;
-  }
-
-  /* Smooth page transitions */
-  .page-enter {
-    animation: page-enter 0.3s ease-out;
-  }
-
-  @keyframes page-enter {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
+  
+  .glass { @apply bg-white/90 backdrop-blur-md border-b border-black/5; }
 }

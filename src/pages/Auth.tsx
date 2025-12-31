@@ -26,7 +26,7 @@ export default function Auth() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const validation = authSchema.safeParse({ email, password });
     if (!validation.success) {
       toast({
@@ -114,8 +114,8 @@ export default function Auth() {
               {isLogin ? 'Entrar' : 'Criar conta'}
             </CardTitle>
             <CardDescription>
-              {isLogin 
-                ? 'Acesse sua conta para continuar' 
+              {isLogin
+                ? 'Acesse sua conta para continuar'
                 : 'Preencha os dados para começar'
               }
             </CardDescription>
@@ -155,8 +155,8 @@ export default function Auth() {
                   </button>
                 </div>
               </div>
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full h-12 text-base bg-gradient-gold hover:opacity-90 text-primary-foreground font-semibold shadow-gold transition-all"
                 disabled={loading}
               >
@@ -170,11 +170,7 @@ export default function Auth() {
                 onClick={() => setIsLogin(!isLogin)}
                 className="text-sm text-muted-foreground hover:text-primary transition-colors"
               >
-                {isLogin ? (
-                  <>Não tem conta? <span className="text-primary font-semibold">Criar agora</span></>
-                ) : (
-                  <>Já tem conta? <span className="text-primary font-semibold">Fazer login</span></>
-                )}
+
               </button>
             </div>
           </CardContent>
