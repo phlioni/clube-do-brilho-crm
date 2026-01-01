@@ -10,7 +10,7 @@ import { Card, CardContent } from '@/components/ui/card';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Plus, Users, Edit2, Trash2, Phone, Mail, Search, ShoppingBag, MapPin } from 'lucide-react';
+import { Plus, Users, Edit2, Trash2, Phone, Search, ShoppingBag, MapPin, Gift } from 'lucide-react'; // Adicionei Gift
 import { useToast } from '@/hooks/use-toast';
 
 interface Customer {
@@ -18,6 +18,7 @@ interface Customer {
   name: string;
   phone: string | null;
   email: string | null;
+  birth_date: string | null; // Novo campo
   notes: string | null;
   street: string | null;
   number: string | null;
@@ -53,7 +54,7 @@ export default function Customers() {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    email: '',
+    birth_date: '', // Substitui email
     notes: '',
     street: '',
     number: '',
@@ -91,7 +92,7 @@ export default function Customers() {
     const customerData = {
       name: formData.name.trim(),
       phone: formData.phone.trim() || null,
-      email: formData.email.trim() || null,
+      birth_date: formData.birth_date || null, // Salva data de nascimento
       notes: formData.notes.trim() || null,
       street: formData.street.trim() || null,
       number: formData.number.trim() || null,
@@ -135,7 +136,7 @@ export default function Customers() {
 
   const resetForm = () => {
     setFormData({
-      name: '', phone: '', email: '', notes: '',
+      name: '', phone: '', birth_date: '', notes: '',
       street: '', number: '', neighborhood: '', city: '', state: '', complement: ''
     });
     setEditingCustomer(null);
@@ -147,7 +148,7 @@ export default function Customers() {
     setFormData({
       name: customer.name,
       phone: customer.phone || '',
-      email: customer.email || '',
+      birth_date: customer.birth_date || '', // Carrega a data
       notes: customer.notes || '',
       street: customer.street || '',
       number: customer.number || '',
@@ -167,14 +168,22 @@ export default function Customers() {
 
   const filteredCustomers = customers.filter(c =>
     c.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-    c.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
     c.phone?.includes(searchTerm)
   );
 
   const formatCurrency = (value: number) => new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(value);
   const formatDate = (dateString: string) => new Date(dateString).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short', year: 'numeric' });
 
-  // Função auxiliar para formatar endereço na listagem
+  // Função para formatar o aniversário (ex: 25/12)
+  const formatBirthday = (dateString: string) => {
+    if (!dateString) return '';
+    const date = new Date(dateString);
+    // Ajuste de fuso horário simples para exibir a data correta
+    const userTimezoneOffset = date.getTimezoneOffset() * 60000;
+    const adjustedDate = new Date(date.getTime() + userTimezoneOffset);
+    return adjustedDate.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+  };
+
   const formatAddress = (c: Customer) => {
     const parts = [
       c.street,
@@ -228,8 +237,13 @@ export default function Customers() {
                       <Input value={formData.phone} onChange={(e) => setFormData({ ...formData, phone: e.target.value })} placeholder="(00) 00000-0000" className="h-11 mt-1.5" />
                     </div>
                     <div>
-                      <Label>Email</Label>
-                      <Input type="email" value={formData.email} onChange={(e) => setFormData({ ...formData, email: e.target.value })} placeholder="email@exemplo.com" className="h-11 mt-1.5" />
+                      <Label>Data de Nascimento</Label>
+                      <Input
+                        type="date"
+                        value={formData.birth_date}
+                        onChange={(e) => setFormData({ ...formData, birth_date: e.target.value })}
+                        className="h-11 mt-1.5"
+                      />
                     </div>
                   </div>
                 </div>
@@ -318,12 +332,15 @@ export default function Customers() {
                         <span>{customer.phone}</span>
                       </div>
                     )}
-                    {customer.email && (
+
+                    {/* Exibição da Data de Nascimento */}
+                    {customer.birth_date && (
                       <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                        <Mail className="w-3.5 h-3.5" />
-                        <span className="truncate">{customer.email}</span>
+                        <Gift className="w-3.5 h-3.5" />
+                        <span>{formatBirthday(customer.birth_date)}</span>
                       </div>
                     )}
+
                     {(customer.street || customer.city) && (
                       <div className="flex items-start gap-2 text-sm text-muted-foreground">
                         <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
@@ -367,7 +384,7 @@ export default function Customers() {
         </div>
       )}
 
-      {/* Purchase History Dialog */}
+      {/* Purchase History Dialog (Mantido igual) */}
       <Dialog open={showHistoryDialog} onOpenChange={setShowHistoryDialog}>
         <DialogContent className="max-w-md">
           <DialogHeader>
