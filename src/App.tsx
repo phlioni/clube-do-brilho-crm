@@ -9,11 +9,13 @@ import Dashboard from "./pages/Dashboard";
 import Inventory from "./pages/Inventory";
 import Customers from "./pages/Customers";
 import Sales from "./pages/Sales";
-import Settings from "./pages/Settings";
+// Settings removido conforme solicitado anteriormente
 import NotFound from "./pages/NotFound";
+import ImportData from "./pages/ImportData"; // Nova tela de importação
 
 const queryClient = new QueryClient();
 
+// Componente de Rota Protegida (Mantido conforme seu código original)
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
 
@@ -32,6 +34,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Componente de Rota de Autenticação (Mantido conforme seu código original)
 function AuthRoute({ children }: { children: React.ReactNode }) {
   const { user, loading } = useAuth();
 
@@ -59,11 +62,16 @@ const App = () => (
         <AuthProvider>
           <Routes>
             <Route path="/auth" element={<AuthRoute><Auth /></AuthRoute>} />
+
+            {/* Rotas Protegidas */}
             <Route path="/" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
             <Route path="/inventory" element={<ProtectedRoute><Inventory /></ProtectedRoute>} />
             <Route path="/customers" element={<ProtectedRoute><Customers /></ProtectedRoute>} />
             <Route path="/sales" element={<ProtectedRoute><Sales /></ProtectedRoute>} />
-            <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+
+            {/* Nova Rota de Importação */}
+            <Route path="/import" element={<ProtectedRoute><ImportData /></ProtectedRoute>} />
+
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
@@ -72,4 +80,4 @@ const App = () => (
   </QueryClientProvider>
 );
 
-export default App;
+export default App;   

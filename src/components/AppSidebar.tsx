@@ -1,6 +1,6 @@
 import { useLocation, Link } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
-import { LayoutDashboard, Package, Users, LogOut, ShoppingCart, Menu } from 'lucide-react';
+import { LayoutDashboard, Package, Users, LogOut, ShoppingCart, Menu, Upload } from 'lucide-react';
 import {
   Sidebar,
   SidebarContent,
@@ -22,6 +22,7 @@ const navItems = [
   { path: '/inventory', icon: Package, label: 'Estoque' },
   { path: '/customers', icon: Users, label: 'Clientes' },
   { path: '/sales', icon: ShoppingCart, label: 'Vendas' },
+  { path: '/import', icon: Upload, label: 'Importar Dados' },
 ];
 
 export function AppSidebar() {
@@ -37,11 +38,11 @@ export function AppSidebar() {
       {/* Ajuste de padding do header para acomodar logo maior */}
       <SidebarHeader className="p-4 pb-2">
         <Link to="/" className={`flex items-center gap-4 group ${isCollapsed ? 'justify-center' : ''}`}>
-          {/* LOGO AUMENTADA NO SIDEBAR */}
+          {/* LOGO NO SIDEBAR */}
           <img
             src="/logo.png"
             alt="Logo Clube do Brilho"
-            // Expandido: h-16 (64px), Recolhido: h-12 w-12 (48px)
+            // Tamanhos ajustados conforme solicitado (maior)
             className={`transition-all duration-300 object-contain ${isCollapsed ? 'h-12 w-12' : 'h-16 w-auto'}`}
           />
 
@@ -132,7 +133,7 @@ export function MobileHeader() {
         </SidebarTrigger>
         <span className="font-display text-lg font-bold text-primary tracking-tight">Clube do Brilho</span>
       </div>
-      {/* LOGO AUMENTADA NO MOBILE HEADER (h-12) */}
+      {/* LOGO NO MOBILE HEADER */}
       <img
         src="/logo.png"
         alt="Logo Clube do Brilho"
